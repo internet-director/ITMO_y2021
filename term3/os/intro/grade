@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+from gradelib import *
+
+r = Runner(save("xv6.out"))
+
+@test(1, "pingpong")
+def test_pingpong():
+    r.run_qemu(shell_script([
+        'pingpong',
+        'echo OK'
+    ]))
+    r.match(
+        '^\\d+: got ping$',
+        '^\\d+: got pong$',
+        '^OK$'
+    )
+
+@test(1, "pingpong, calls pipe")
+def test_pingpong_pipe():
+    r.run_qemu(shell_script([
+        'pingpong',
+        'echo FAIL'
+    ]), stop_breakpoint('sys_pipe'))
+    r.match(
+        '\\$ pingpong',
+        no=['FAIL']
+    )
+
+@test(1, "dump")
+def test_dump():
+    r.run_qemu(shell_script([
+        'dumptests',
+        'echo OK'
+    ]))
+    r.match(
+        '^dump syscall found. Start testing$',
+        '^4 tests were ran$',
+        '^OK$',
+        no=['^No dump syscall found. Stop testing$']
+    )
+
+run_tests()

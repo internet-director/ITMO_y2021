@@ -1,0 +1,29 @@
+VCRUNTIME140.dll
+    __std_type_info_destroy_list
+    __C_specific_handler
+    memset
+api-ms-win-crt-runtime-l1-1-0.dll
+    _cexit
+    _execute_onexit_table
+    _initialize_onexit_table
+    _initialize_narrow_environment
+    _configure_narrow_argv
+    _seh_filter_dll
+    _initterm_e
+    _initterm
+KERNEL32.dll
+    GetCurrentThreadId
+    RtlVirtualUnwind
+    RtlLookupFunctionEntry
+    RtlCaptureContext
+    SetUnhandledExceptionFilter
+    IsDebuggerPresent
+    InitializeSListHead
+    DisableThreadLibraryCalls
+    GetSystemTimeAsFileTime
+    UnhandledExceptionFilter
+    GetCurrentProcessId
+    QueryPerformanceCounter
+    IsProcessorFeaturePresent
+    TerminateProcess
+    GetCurrentProcess

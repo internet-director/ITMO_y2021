@@ -1,0 +1,49 @@
+VCRUNTIME140.dll
+    __current_exception
+    __current_exception_context
+    __C_specific_handler
+    memset
+api-ms-win-crt-runtime-l1-1-0.dll
+    terminate
+    _register_thread_local_exe_atexit_callback
+    _crt_atexit
+    _set_app_type
+    _initialize_onexit_table
+    _c_exit
+    _cexit
+    __p___argv
+    __p___argc
+    _seh_filter_exe
+    _exit
+    exit
+    _initterm_e
+    _initterm
+    _get_initial_narrow_environment
+    _initialize_narrow_environment
+    _configure_narrow_argv
+    _register_onexit_function
+api-ms-win-crt-math-l1-1-0.dll
+    __setusermatherr
+api-ms-win-crt-stdio-l1-1-0.dll
+    __p__commode
+    _set_fmode
+api-ms-win-crt-locale-l1-1-0.dll
+    _configthreadlocale
+api-ms-win-crt-heap-l1-1-0.dll
+    _set_new_mode
+KERNEL32.dll
+    GetCurrentThreadId
+    RtlLookupFunctionEntry
+    RtlVirtualUnwind
+    UnhandledExceptionFilter
+    SetUnhandledExceptionFilter
+    GetModuleHandleW
+    IsDebuggerPresent
+    InitializeSListHead
+    GetSystemTimeAsFileTime
+    RtlCaptureContext
+    GetCurrentProcessId
+    QueryPerformanceCounter
+    IsProcessorFeaturePresent
+    TerminateProcess
+    GetCurrentProcess

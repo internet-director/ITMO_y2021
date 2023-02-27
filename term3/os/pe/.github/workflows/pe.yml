@@ -1,0 +1,46 @@
+name: pe
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+jobs:
+  basic:
+    runs-on: [self-hosted, os]
+    timeout-minutes: 1
+    name: "Basic checks"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Check that branch has name 'pe'"
+        run: |
+          test "${GITHUB_HEAD_REF##*/}" = "pe"
+      - name: "Check description"
+        run: |
+          hours=$(echo "$GITHUB_PR" | sed -n 3p | tr -d '[:space:]')
+          if [[ "$hours" == +([[:digit:]]) ]]; then
+            echo "Hours spent: $hours"
+          else
+            echo "::error Please fill in hours spent into pull request description"
+            exit 1
+          fi
+        env:
+          GITHUB_PR: ${{ github.event.pull_request.body }}
+  tests:
+    runs-on: [self-hosted, os]
+    timeout-minutes: 10
+    name: 'Required tests'
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+      - name: 'Run tests'
+        run: make validation-pe-tests import-dll-tests import-function-tests
+  bonus-export:
+    runs-on: [self-hosted, os]
+    timeout-minutes: 10
+    name: 'Bonus: export'
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+      - name: 'Run tests'
+        run: make export-function-tests
