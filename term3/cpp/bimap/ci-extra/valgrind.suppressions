@@ -1,0 +1,8 @@
+{
+   clang_libcxxabi_exception_one_time_allocation
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   ...
+   fun:__cxa_get_globals
+}

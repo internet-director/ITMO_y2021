@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+from gradelib import *
+
+r = Runner(save("xv6.out"))
+
+@test(0, "running lazytests")
+def test_lazytests():
+    r.run_qemu(shell_script([
+        'lazytests'
+    ]))
+
+@test(1, "lazy: map", parent=test_lazytests)
+def test_filetest():
+    r.match("^test lazy unmap: OK$")
+
+@test(1, "lazy: unmap", parent=test_lazytests)
+def test_memtest():
+    r.match("test lazy alloc: OK$")
+
+run_tests()
+

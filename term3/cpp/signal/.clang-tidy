@@ -1,0 +1,44 @@
+---
+Checks: |-
+  bugprone-*,
+  -cert-dcl21-cpp,
+  cert-dcl58-cpp,
+  cert-err34-c,
+  cert-oop57-cpp,
+  cert-oop58-cpp,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-type-const-cast,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-static-cast-downcast,
+  -cppcoreguidelines-pro-type-union-access,
+  -cppcoreguidelines-special-member-functions,
+  google-default-arguments,
+  google-explicit-constructor,
+  google-runtime-operator
+  hicpp-signed-bitwise,
+  llvm-include-order,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
+  misc-definitions-in-headers,
+  misc-misplaced-const,
+  misc-redundant-expression,
+  misc-throw-by-value-catch-by-reference,
+  misc-unconventional-assign-operator,
+  misc-unused-*,
+  performance-*,
+  -performance-noexcept-move-constructor,
+  readability-redundant-member-init,
+  readability-redundant-smartptr-get,
+  readability-redundant-string-cstr,
+  readability-redundant-string-init,
+  readability-simplify-boolean-expr,
+  readability-use-anyofallof,
+CheckOptions:
+  - key:             hicpp-signed-bitwise.IgnorePositiveIntegerLiterals
+    value:           true
+...
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+import re
+from gradelib import *
+
+r = Runner(save("xv6.out"))
+
+@test(1, "dump2")
+def test_dump2():
+    r.run_qemu(shell_script([
+        'dump2tests',
+        'echo OK'
+    ]))
+    r.match(
+        '^dump2 tests started$',
+        '^dump2 syscall found. Start testing$',
+        '^4 tests were run. 4 tests passed$',
+        '^OK$',
+        no=['^no dump2 syscall found. Stop testing$']
+    )
+
+
+run_tests()

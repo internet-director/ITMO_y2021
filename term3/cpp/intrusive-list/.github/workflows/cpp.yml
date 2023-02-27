@@ -1,0 +1,51 @@
+name: C++ CI
+
+on:
+  pull_request
+
+jobs:
+  test:
+    name: Tests in ${{ matrix.build_type }} with ${{ matrix.compilerSetter }}
+    runs-on: ubuntu-20.04
+    container: 
+      image: ubuntu:20.04
+      options: --privileged
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    strategy:
+      matrix:
+        build_type: [Release, Debug, SanitizedDebug, RelWithDebInfo]
+        compilerSetter: [CC=gcc CXX=g++, CC=clang CXX='clang++ -stdlib=libc++']
+
+    steps:
+    - name: dependencies
+      run: |
+        apt-get update
+        apt-get install -y gpg wget
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+        echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+
+        apt-get update
+        apt-get install -y git build-essential binutils gcc clang cmake valgrind libc++-dev libc++abi-dev ninja-build curl zip unzip tar pkg-config libunwind-dev kitware-archive-keyring gdb
+        cd ..
+        git clone https://github.com/microsoft/vcpkg.git
+        ./vcpkg/bootstrap-vcpkg.sh
+        cd $GITHUB_WORKSPACE
+
+    # see https://github.com/actions/checkout/issues/760    
+    - name: git-workaround
+      run: |
+        export REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+        git config --global --add safe.directory /__w/${REPOSITORY_NAME}/${REPOSITORY_NAME}
+        
+    - uses: actions/checkout@v2
+
+    - name: Build main
+      run: ${{ matrix.compilerSetter }} ci-extra/build.sh ${{ matrix.build_type }}
+
+    - name: Test main
+      run: ci-extra/test.sh ${{ matrix.build_type }}
+
+    - if: ${{ matrix.build_type == 'RelWithDebInfo' }}
+      name: Test main with valgrind
+      run: ci-extra/test-valgrind.sh

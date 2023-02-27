@@ -1,0 +1,58 @@
+name: C++ CI
+
+on:
+  pull_request
+
+jobs:
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run clang-format style check for C/C++/Protobuf programs.
+        uses: jidicula/clang-format-action@v4.9.0
+        with:
+          clang-format-version: '15'
+          check-path: '.'
+
+  test:
+    needs: formatting-check
+    name: Tests in ${{ matrix.build_type }} with ${{ matrix.compilerSetter }}
+    runs-on: ubuntu-22.04
+    container: 
+      image: ubuntu:22.04
+      options: --privileged
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    strategy:
+      matrix:
+        build_type: [Release, Debug, SanitizedDebug, RelWithDebInfo]
+        # clang-14 uses dwarf-5 which valgrind doesn't support yet
+        compilerSetter: [CC=gcc CXX=g++, CC=clang CXX='clang++ -gdwarf-4 -stdlib=libc++' ASAN_OPTIONS=alloc_dealloc_mismatch=0]
+
+    steps:
+    - name: dependencies
+      run: |
+        apt-get update
+        apt-get install -y gpg wget
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+        echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+
+        apt-get update
+        apt-get install -y git build-essential binutils gcc clang cmake valgrind libc++-dev libc++abi-dev ninja-build curl zip unzip tar pkg-config kitware-archive-keyring gdb
+        cd ..
+        git clone https://github.com/microsoft/vcpkg.git
+        ./vcpkg/bootstrap-vcpkg.sh
+        cd $GITHUB_WORKSPACE
+
+    - uses: actions/checkout@v3
+
+    - name: Build main
+      run: ${{ matrix.compilerSetter }} ci-extra/build.sh ${{ matrix.build_type }}
+
+    - name: Test main
+      run: ${{ matrix.compilerSetter }} ci-extra/test.sh ${{ matrix.build_type }}
+
+    - if: ${{ matrix.build_type == 'RelWithDebInfo' }}
+      name: Test main with valgrind
+      run: ${{ matrix.compilerSetter }} ci-extra/test-valgrind.sh

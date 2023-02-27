@@ -1,0 +1,47 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 21,
+      "patch": 0
+    },
+    "configurePresets": [
+      {
+        "name": "Release",
+        "displayName": "Release",
+        "description": "Default Release build",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        },
+        "binaryDir": "cmake-build-Release"
+      },
+      {
+        "name": "Debug",
+        "displayName": "debug",
+        "description": "Debug build without sanitizers",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug"
+        },
+        "binaryDir": "cmake-build-Debug"
+      },
+      {
+        "name": "SanitizedDebug",
+        "displayName": "SanitizedDebug",
+        "description": "Debug build with undefined, address and leak sanitizers enabled",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "USE_SANITIZERS": "ON"
+        },
+        "binaryDir": "cmake-build-SanitizedDebug"
+      },
+      {
+        "name": "RelWithDebInfo",
+        "displayName": "RelWithDebInfo",
+        "description": "Release with debug info",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+        },
+        "binaryDir": "cmake-build-RelWithDebInfo"
+      }
+    ]
+  }
