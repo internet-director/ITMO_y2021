@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -57,10 +57,11 @@ enum ConsoleColor
 	LightRed = 12,
 	LightMagenta = 13,
 	Yellow = 14,
-	White = 15
+	White = 15,
+	None = 16
 };
 
-void SetColor(int text, ConsoleColor background)
+void SetColor(ConsoleColor text, ConsoleColor background)
 {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
@@ -186,6 +187,40 @@ void printFloat(T* f) {
 	printf("\n");
 }
 
+/*
+	Black = 0,
+	Blue = 1,
+	Green = 2,
+	Cyan = 3,
+	Red = 4,
+	Magenta = 5,
+	Brown = 6,
+	LightGray = 7,
+	DarkGray = 8,
+	LightBlue = 9,
+	LightGreen = 10,
+	LightCyan = 11,
+	LightRed = 12,
+	LightMagenta = 13,
+	Yellow = 14,
+	White = 15*/
+
+void printChars(std::wstring& data, ConsoleColor color = None) {
+	DWORD len = 0;
+	for (auto it : data) {
+		if (color != None) SetColor(color, Black);
+		else {
+			if (it == L'.') SetColor(Black, Black);
+			else if (it == L'\\') SetColor(Red, Black);
+			else if (it == L'/') SetColor(Red, Black);
+			else if (it == L'(') SetColor(Red, Black);
+			else SetColor(Red, Black);
+		}
+		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE), &it, 1, &len, NULL);
+		SetColor(White, Black);
+	}
+}
+
 int main() {
 	/*
 	lol a(123);
@@ -216,6 +251,34 @@ int main() {
 		CloseClipboard();
 	}
 	return 0;*/
+	setlocale(LC_ALL, "");
+
+	std::wstring superString = LR"(
+............/´¯/)...............(\¯`\...... ......
+.........../...//............. .\\...\............
+........../...//.................\\...\...........
+....../´¯/.../´¯\.ТВОЙ КОНВЕРТЕР./¯` ..\¯`\.......
+..././../.../../.|_....КАЛ...._|.\..\...\..\.\....
+.(.(...(...(../.)..).........(..(.\..)...)..).)...
+.\............\/.../.........\...\/.........../...
+..\............../............\............../....
+...\............(..............)............/.....
+....\............\............./.........../......
+)";
+
+	std::wstring author = LR"(
+<.........By https://github.com/madoxann.........>
+)";
+
+	std::wstring title = LR"(
+<...........Что, не компилируется, да?...........>
+)";
+
+
+	printChars(title, Green);
+	printChars(superString);
+	printChars(author, Green);
+
 	std::vector<std::wstring> files;
 	std::wstring path = L"F:\\Foton\\source\\C\\lab\\x64\\Release\\test\\*";
 	std::wstring prog = L"F:\\Foton\\source\\C\\lab\\x64\\Release\\lab2.exe";
@@ -228,6 +291,7 @@ int main() {
 	recurse(data, path.size(), 0, files);
 
 	int err = 0;
+
 
 	// 43
 	// 44
@@ -270,7 +334,7 @@ int main() {
 			}
 			goto end;
 		}
- 
+
 	end:;
 
 		std::cout << "\n";
@@ -278,9 +342,9 @@ int main() {
 		//out_dop.close();
 	}
 
-	SetColor(15, Green);
+	SetColor(White, Green);
 	std::cout << "\nSuccess: " << files.size() - err << "/" << files.size() << "\n";
-	SetColor(15, Black);
+	SetColor(White, Black);
 
 	return 0;
 }
