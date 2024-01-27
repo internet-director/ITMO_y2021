@@ -1,0 +1,1 @@
+ghc -o hi .\app\Main.hs .\src\HW5\Base.hs .\src\HW5\Parser.hs .\src\HW5\Evaluator.hs

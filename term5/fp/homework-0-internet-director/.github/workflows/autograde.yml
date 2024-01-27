@@ -1,0 +1,29 @@
+name: GitHub Classroom Workflow
+
+on: [push]
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+      - name: run tests
+        run: |
+          hw=$(find ./repo -type d -regex './repo/hw[0-7]' -print | head -n 1 | cut -c8-)
+          if [ -z "$hw" ]; then
+            echo "The homework directory could not be found. The root of your repository should contain a homework directory whose name should match the pattern \"hw[0-7]\"."
+            exit 1
+          fi
+          echo "$hw" > hw
+          set +e
+          res=$(runChecker $GITHUB_WORKSPACE/repo/$hw)
+          exitcode=$?
+          set -e
+          echo "$res" > ./checker-logs
+          cat ./checker-logs
+          # get the json object from the end of the log
+          pcregrep -M '{(\n +.*)+\n}\n\z' ./checker-logs > ./result
+          exit $exitcode
