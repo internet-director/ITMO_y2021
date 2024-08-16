@@ -1,0 +1,58 @@
+void f() {
+
+}
+
+auto l = [](const auto& it) {
+	return it.d == 0;
+}
+
+struct _l {
+
+	operator(const auto& it) {
+
+}
+}
+
+class {
+public:
+static void th() {throw 4;}
+
+}
+
+std::functional<bool(int)> f = std::move(lambda);
+
+f(456);
+
+
+template<typename... Args>
+void temp(Args&&...args) {
+	printer(std::forward(args)...);
+}
+
+const int& and && -> &&
+int&& and && -> &&
+
+&& - rvalue
+& - lvalue
+
+[..........]
+. = 16b;
+
+
+for(int i = 0; i < vec.size(); i++) {
+	auto& str = vec[i];
+	format(std::move(str))
+}
+
+temp(4, "kal", std::move(lambda), f);
+
+
+ГОООООООООООООООООООООООООООООООООООООООЛЛЛЛЛЛЛЛЛ 
+ГГГГООООЙДААААААА
+
+
+
+
+
+
+
